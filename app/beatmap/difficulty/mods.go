@@ -38,8 +38,13 @@ const (
 	ScoreV2
 	LastMod
 	Daycore
+	Blinds
+	StrictTracking
+	AccuracyChallenge
 	DifficultyAdjust
 	Classic
+	Alternate
+	SingleTap
 
 	// DifficultyAdjustMask is outdated, use GetDiffMaskedMods instead
 	DifficultyAdjustMask    = HardRock | Easy | DoubleTime | Nightcore | HalfTime | Daycore | Flashlight | Relax
@@ -99,8 +104,10 @@ var modsString = [...]string{
 	"V2",
 	"LM",
 	"DC",
-	"DA",
-	"CL",
+	"DA", // Difficulty Adjust
+	"CL", // Classic
+	"AL", // Alternate
+	"SG", // Singletap
 }
 
 var modsStringFull = [...]string{
@@ -138,6 +145,8 @@ var modsStringFull = [...]string{
 	"Daycore",
 	"DifficultyAdjust",
 	"Classic",
+	"Alternate",
+	"SingleTap",
 }
 
 func (mods Modifier) GetScoreMultiplier() float64 {
