@@ -2,8 +2,9 @@ package difficulty
 
 import (
 	"fmt"
-	"github.com/wieku/danser-go/framework/math/mutils"
 	"math"
+
+	"github.com/wieku/danser-go/framework/math/mutils"
 )
 
 const (

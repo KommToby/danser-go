@@ -1,6 +1,8 @@
 package difficulty
 
-import "github.com/kommtoby/rplpa"
+import (
+	"github.com/kommtoby/rplpa"
+)
 
 type Modifier int64
 
@@ -250,7 +252,21 @@ func (mods Modifier) GetScoreMultiplier() float64 {
 		multiplier *= 0.9
 	}
 
+	if containsMod(mods.StringFull(), "DifficultyAdjust") {
+		multiplier *= 0.1 // this SHOULD be 0.5, but for the case of osu!collab series (which is why im doing this) - im setting it to 0.1 temporarily.
+	}
+
 	return multiplier
+}
+
+// might be redundant
+func containsMod(mods []string, targetMod string) bool {
+	for _, mod := range mods {
+		if mod == targetMod {
+			return true
+		}
+	}
+	return false
 }
 
 func (mods Modifier) String() (s string) {
