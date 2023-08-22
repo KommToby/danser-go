@@ -253,7 +253,7 @@ func (mods Modifier) GetScoreMultiplier() float64 {
 	}
 
 	if containsMod(mods.StringFull(), "DifficultyAdjust") {
-		multiplier *= 0.1 // this SHOULD be 0.5, but for the case of osu!collab series (which is why im doing this) - im setting it to 0.1 temporarily.
+		multiplier *= 0.5 // reset this to 0.5
 	}
 
 	return multiplier
