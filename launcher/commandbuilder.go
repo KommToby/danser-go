@@ -2,13 +2,14 @@ package launcher
 
 import (
 	"encoding/json"
+	"strconv"
+	"strings"
+
+	"github.com/kommtoby/rplpa"
 	"github.com/wieku/danser-go/app/beatmap"
 	"github.com/wieku/danser-go/app/beatmap/difficulty"
 	"github.com/wieku/danser-go/framework/math/math32"
-	"github.com/wieku/rplpa"
 	"golang.org/x/exp/constraints"
-	"strconv"
-	"strings"
 )
 
 type floatParam param[float32]

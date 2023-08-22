@@ -14,13 +14,13 @@ require (
 	github.com/inkyblackness/imgui-go/v4 v4.4.1-0.20220209062255-f8ed29c1276f
 	github.com/itchio/lzma v0.0.0-20190703113020-d3e24e3e3d49
 	github.com/karrick/godirwalk v1.16.1
+	github.com/kommtoby/rplpa v0.2.1
 	github.com/mattn/go-sqlite3 v1.14.17
 	github.com/nattawitc/rich-go v0.0.0-20200402133947-4fcadd738f5b
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/shirou/gopsutil/v3 v3.23.7
 	github.com/sqweek/dialog v0.0.0-20220504154117-be45b268883a
 	github.com/thehowl/go-osuapi v0.0.0-20181219091033-b29455689881
-	github.com/wieku/rplpa v1.0.0
 	golang.org/x/exp v0.0.0-20220312040426-20fd27f61765
 	golang.org/x/image v0.10.0
 	golang.org/x/sys v0.10.0

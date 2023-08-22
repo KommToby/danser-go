@@ -2,16 +2,17 @@ package dance
 
 import (
 	"fmt"
+	"sort"
+	"time"
+
 	"github.com/karrick/godirwalk"
+	"github.com/kommtoby/rplpa"
 	"github.com/wieku/danser-go/app/dance/input"
 	"github.com/wieku/danser-go/app/dance/movers"
 	"github.com/wieku/danser-go/app/dance/schedulers"
 	"github.com/wieku/danser-go/app/dance/spinners"
 	"github.com/wieku/danser-go/framework/env"
 	"github.com/wieku/danser-go/framework/math/mutils"
-	"github.com/wieku/rplpa"
-	"sort"
-	"time"
 
 	//"github.com/thehowl/go-osuapi"
 	"github.com/wieku/danser-go/app/beatmap"
@@ -20,13 +21,16 @@ import (
 	"github.com/wieku/danser-go/app/rulesets/osu"
 	"github.com/wieku/danser-go/app/settings"
 
-	"github.com/wieku/danser-go/framework/math/vector"
 	"io/ioutil"
 	"log"
+
+	"github.com/wieku/danser-go/framework/math/vector"
+
 	//"net/http"
 	//"net/url"
 	"os"
 	"path/filepath"
+
 	//"strconv"
 	"strings"
 	"unicode"
@@ -124,7 +128,17 @@ func (controller *ReplayController) SetBeatMap(beatMap *beatmap.BeatMap) {
 		log.Println(fmt.Sprintf("Loading replay for \"%s\":", replay.Username))
 
 		control := NewSubControl()
-		control.mods = difficulty.Modifier(replay.Mods)
+
+		var chosenMods difficulty.Modifier
+
+		if replay.ScoreInfo != nil {
+			chosenMods = difficulty.ParseLazerMods(replay.ScoreInfo)
+		} else {
+			chosenMods = difficulty.Modifier(replay.Mods)
+		}
+
+		// Assign the chosen mods to the control mods
+		control.mods = chosenMods
 
 		log.Println("\tMods:", control.mods.String())
 

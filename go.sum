@@ -33,6 +33,8 @@ github.com/itchio/lzma v0.0.0-20190703113020-d3e24e3e3d49 h1:+YrBMf3rkLjkT10zIHy
 github.com/itchio/lzma v0.0.0-20190703113020-d3e24e3e3d49/go.mod h1:avNrevQMli1pYPsz1+HIHMvx95pk6O+6otbWqCZPeZI=
 github.com/karrick/godirwalk v1.16.1 h1:DynhcF+bztK8gooS0+NDJFrdNZjJ3gzVzC545UNA9iw=
 github.com/karrick/godirwalk v1.16.1/go.mod h1:j4mkqPuvaLI8mp1DroR3P6ad7cyYd4c1qeJ3RV7ULlk=
+github.com/kommtoby/rplpa v0.2.1 h1:qJrQcGr2A+oPAaYak6r63JrCldZTw1O2X62Fv3nFO00=
+github.com/kommtoby/rplpa v0.2.1/go.mod h1:rscG4Rg1fxS6ZtQYGB711WZr09mrsUPHxUA7W409eKA=
 github.com/lucasb-eyer/go-colorful v1.2.0 h1:1nnpGOrhyZZuNyfu1QjKiUICQ74+3FNCN69Aj6K7nkY=
 github.com/lucasb-eyer/go-colorful v1.2.0/go.mod h1:R4dSotOR9KMtayYi1e77YzuveK+i7ruzyGqttikkLy0=
 github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 h1:6E+4a0GO5zZEnZ81pIr0yLvtUWk2if982qA3F3QD6H4=
@@ -82,10 +84,6 @@ github.com/tklauser/numcpus v0.6.0 h1:kebhY2Qt+3U6RNK7UqpYNA+tJ23IBEGKkB7JQBfDYm
 github.com/tklauser/numcpus v0.6.0/go.mod h1:FEZLMke0lhOUG6w2JadTzp0a+Nl8PF/GFkQ5UVIcaL4=
 github.com/wieku/dialog v0.0.0-20221229220948-2d1daf4d8f13 h1:nEweqtA5ItHRdK+eAIXg93qmhpVT7lCfjlewe6dJMDM=
 github.com/wieku/dialog v0.0.0-20221229220948-2d1daf4d8f13/go.mod h1:WwGLImngYk6muW1mZ84t7VD9LWUX6yCtVJbTXk75r8o=
-github.com/wieku/rplpa v0.0.0-20210919131836-bff7a920f6e1 h1:IBfA+cAja6jBYBoUXmgrPsOTG6bcV4mhKVpZz8/uf3Q=
-github.com/wieku/rplpa v0.0.0-20210919131836-bff7a920f6e1/go.mod h1:Lk/V/AJfEHrusnmshAeqt7FQiOnFK9T3BtEGWkNmWY0=
-github.com/wieku/rplpa v1.0.0 h1:TWJFmOEvWuJr1sGZbXCqerLo+EtasGWqJSzXIF2lmJI=
-github.com/wieku/rplpa v1.0.0/go.mod h1:S/fVKNzah7m3SaObos2wZk6qCbINSa0HZYx9elj1rYo=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
 github.com/yusufpapurcu/wmi v1.2.3 h1:E1ctvB7uKFMOJw3fdOW32DwGE9I7t++CRUEMKvFoFiw=
 github.com/yusufpapurcu/wmi v1.2.3/go.mod h1:SBZ9tNy3G9/m5Oi98Zks0QjeHVDvuK0qfxQmPyzfmi0=

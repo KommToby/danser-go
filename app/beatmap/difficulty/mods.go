@@ -1,5 +1,7 @@
 package difficulty
 
+import "github.com/kommtoby/rplpa"
+
 type Modifier int64
 
 const (
@@ -36,6 +38,8 @@ const (
 	ScoreV2
 	LastMod
 	Daycore
+	DifficultyAdjust
+	Classic
 
 	// DifficultyAdjustMask is outdated, use GetDiffMaskedMods instead
 	DifficultyAdjustMask    = HardRock | Easy | DoubleTime | Nightcore | HalfTime | Daycore | Flashlight | Relax
@@ -95,6 +99,8 @@ var modsString = [...]string{
 	"V2",
 	"LM",
 	"DC",
+	"DA",
+	"CL",
 }
 
 var modsStringFull = [...]string{
@@ -130,6 +136,8 @@ var modsStringFull = [...]string{
 	"ScoreV2",
 	"LastMod",
 	"Daycore",
+	"DifficultyAdjust",
+	"Classic",
 }
 
 func (mods Modifier) GetScoreMultiplier() float64 {
@@ -260,6 +268,19 @@ func ParseMods(mods string) (m Modifier) {
 	}
 
 	return
+}
+
+func ParseLazerMods(scoreInfo *rplpa.ScoreInfo) (m Modifier) {
+	for _, mod := range scoreInfo.Mods {
+		for index, availableMod := range modsString {
+			if availableMod == mod.Acronym {
+				m |= 1 << uint(index)
+				break
+			}
+		}
+	}
+
+	return m
 }
 
 func (mods Modifier) Active(mod Modifier) bool {

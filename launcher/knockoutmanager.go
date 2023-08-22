@@ -2,10 +2,11 @@ package launcher
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/inkyblackness/imgui-go/v4"
 	"github.com/wieku/danser-go/app/beatmap/difficulty"
 	"github.com/wieku/danser-go/app/utils"
-	"strconv"
 )
 
 type knockoutManagerPopup struct {
@@ -111,7 +112,16 @@ func (km *knockoutManagerPopup) drawManager() {
 
 			textColumn(utils.Humanize(pReplay.Score))
 
-			textColumn(difficulty.Modifier(pReplay.Mods).String())
+			var combinedMods difficulty.Modifier
+
+			if pReplay.ScoreInfo != nil {
+				scoreInfoMods := difficulty.ParseLazerMods(pReplay.ScoreInfo)
+				combinedMods = difficulty.Modifier(pReplay.Mods) | scoreInfoMods
+			} else {
+				combinedMods = difficulty.Modifier(pReplay.Mods)
+			}
+
+			textColumn(combinedMods.String())
 
 			textColumn(utils.Humanize(pReplay.Count300))
 

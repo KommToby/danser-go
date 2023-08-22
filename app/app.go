@@ -5,9 +5,18 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"math"
+	"os"
+	"runtime"
+	"strings"
+	"time"
+
 	"github.com/faiface/mainthread"
 	"github.com/go-gl/gl/v3.3-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
+	"github.com/kommtoby/rplpa"
 	"github.com/wieku/danser-go/app/audio"
 	"github.com/wieku/danser-go/app/beatmap"
 	difficulty2 "github.com/wieku/danser-go/app/beatmap/difficulty"
@@ -35,14 +44,6 @@ import (
 	"github.com/wieku/danser-go/framework/qpc"
 	"github.com/wieku/danser-go/framework/statistic"
 	"github.com/wieku/danser-go/framework/util"
-	"github.com/wieku/rplpa"
-	"io/ioutil"
-	"log"
-	"math"
-	"os"
-	"runtime"
-	"strings"
-	"time"
 )
 
 const (
