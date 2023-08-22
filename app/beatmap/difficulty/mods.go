@@ -45,6 +45,24 @@ const (
 	Classic
 	Alternate
 	SingleTap
+	Transform
+	Wiggle
+	SpinIn
+	Grow
+	Deflate
+	WindUp
+	WindDown
+	Traceable
+	BarrelRoll
+	ApproachDifferent
+	Muted
+	NoScope
+	Magnetised
+	Repel
+	AdaptiveSpeed
+	FreezeFrame
+	Bubbles
+	Synesthesia
 
 	// DifficultyAdjustMask is outdated, use GetDiffMaskedMods instead
 	DifficultyAdjustMask    = HardRock | Easy | DoubleTime | Nightcore | HalfTime | Daycore | Flashlight | Relax
@@ -108,6 +126,24 @@ var modsString = [...]string{
 	"CL", // Classic
 	"AL", // Alternate
 	"SG", // Singletap
+	"TR", // Transform
+	"WG", // Wiggle
+	"SI", // Spin In
+	"GR", // Grow
+	"DF", // Deflate
+	"WU", // Wind Up
+	"WD", // Wind Down
+	"TC", // Traceable
+	"BR", // Barrel Roll
+	"AD", // Approach Different
+	"MU", // Muted
+	"NS", // No Scope
+	"MG", // Magnetised
+	"RP", // Repel
+	"AS", // Adaptive Speed
+	"FR", // Freeze Frame
+	"BU", // Bubbles
+	"SY", // Synesthesia
 }
 
 var modsStringFull = [...]string{
@@ -147,6 +183,24 @@ var modsStringFull = [...]string{
 	"Classic",
 	"Alternate",
 	"SingleTap",
+	"Transform",
+	"Wiggle",
+	"SpinIn",
+	"Grow",
+	"Deflate",
+	"WindUp",
+	"WindDown",
+	"Traceable",
+	"BarrelRoll",
+	"ApproachDifferent",
+	"Muted",
+	"NoScope",
+	"Magnetised",
+	"Repel",
+	"AdaptiveSpeed",
+	"FreezeFrame",
+	"Bubbles",
+	"Synesthesia",
 }
 
 func (mods Modifier) GetScoreMultiplier() float64 {
