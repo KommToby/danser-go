@@ -125,25 +125,25 @@ var modsString = [...]string{
 	"LM",
 	"DC",
 	"BL", // Blinds
-	"ST", // Strict Tracking
-	"AC", // Accuracy Challenge
-	"DA", // Difficulty Adjust
-	"CL", // Classic
-	"AL", // Alternate
-	"SG", // Singletap
+	"ST", // Strict Tracking (No Multiplier)
+	"AC", // Accuracy Challenge (No Multiplier)
+	"DA", // Difficulty Adjust (Always 0.5x)
+	"CL", // Classic (No Multiplier)
+	"AL", // Alternate (No Multiplier)
+	"SG", // Singletap (No Multiplier)
 	"TR", // Transform
 	"WG", // Wiggle
 	"SI", // Spin In
 	"GR", // Grow
 	"DF", // Deflate
-	"WU", // Wind Up
-	"WD", // Wind Down
+	"WU", // Wind Up (Always 0.5x)
+	"WD", // Wind Down (Always 0.5x)
 	"TC", // Traceable
 	"BR", // Barrel Roll
 	"AD", // Approach Different
 	"MU", // Muted
 	"NS", // No Scope
-	"MG", // Magnetised
+	"MG", // Magnetised (Always 0.5x)
 	"RP", // Repel
 	"AS", // Adaptive Speed
 	"FR", // Freeze Frame
@@ -260,6 +260,26 @@ func (mods Modifier) GetScoreMultiplier() float64 {
 
 	if containsMod(mods.StringFull(), "DifficultyAdjust") {
 		multiplier *= 0.5 // reset this to 0.5
+	}
+
+	if containsMod(mods.StringFull(), "Blinds") {
+		multiplier *= 1.12 // No settings for blinds
+	}
+
+	if containsMod(mods.StringFull(), "WindUp") {
+		multiplier *= 0.5
+	}
+
+	if containsMod(mods.StringFull(), "WindDown") {
+		multiplier *= 0.5
+	}
+
+	if containsMod(mods.StringFull(), "Magnetised") {
+		multiplier *= 0.5
+	}
+
+	if containsMod(mods.StringFull(), "AdaptiveSpeed") {
+		multiplier *= 0.5
 	}
 
 	return multiplier
