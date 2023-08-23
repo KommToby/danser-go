@@ -1,7 +1,10 @@
 package difficulty
 
 import (
+	"reflect"
+
 	"github.com/kommtoby/rplpa"
+	"github.com/wieku/danser-go/app/settings"
 )
 
 type Modifier int64
@@ -214,85 +217,35 @@ var modsStringFull = [...]string{
 func (mods Modifier) GetScoreMultiplier() float64 {
 	multiplier := 1.0
 
-	if mods&NoFail > 0 && mods&ScoreV2 == 0 {
-		multiplier *= 0.5
-	}
-
-	if mods&Easy > 0 {
-		multiplier *= 0.5
-	}
-
-	if mods&HalfTime > 0 {
-		multiplier *= 0.3
-	}
-
-	if mods&Hidden > 0 {
-		multiplier *= 1.06
-	}
-
-	if mods&HardRock > 0 {
-		if mods&ScoreV2 > 0 {
-			multiplier *= 1.10
-		} else {
-			multiplier *= 1.06
+	for _, enabledMod := range mods.StringFull() { // checks every enabled mod against the modmult struct in gameplay settings
+		if value, ok := getFieldValue(settings.Gameplay.ModMults, enabledMod); ok {
+			multiplier *= value // if the mod has a defined multiplier in gameplay settings it applies it
 		}
 	}
-
-	if mods&DoubleTime > 0 {
-		if mods&ScoreV2 > 0 {
-			multiplier *= 1.20
-		} else {
-			multiplier *= 1.12
-		}
-	}
-
-	if mods&Flashlight > 0 {
-		multiplier *= 1.12
-	}
-
-	if (mods&Relax | mods&Relax2) > 0 {
-		multiplier = 0
-	}
-
-	if mods&SpunOut > 0 {
-		multiplier *= 0.9
-	}
-
-	if containsMod(mods.StringFull(), "DifficultyAdjust") {
-		multiplier *= 0.5 // reset this to 0.5
-	}
-
-	if containsMod(mods.StringFull(), "Blinds") {
-		multiplier *= 1.12 // No settings for blinds
-	}
-
-	if containsMod(mods.StringFull(), "WindUp") {
-		multiplier *= 0.5
-	}
-
-	if containsMod(mods.StringFull(), "WindDown") {
-		multiplier *= 0.5
-	}
-
-	if containsMod(mods.StringFull(), "Magnetised") {
-		multiplier *= 0.5
-	}
-
-	if containsMod(mods.StringFull(), "AdaptiveSpeed") {
-		multiplier *= 0.5
-	}
-
 	return multiplier
 }
 
-// might be redundant
-func containsMod(mods []string, targetMod string) bool {
-	for _, mod := range mods {
-		if mod == targetMod {
-			return true
-		}
+func getFieldValue(data interface{}, fieldName string) (float64, bool) {
+	// get the mod multiplier if it exists in the modmult struct
+	value := reflectValue(data)
+	field := value.FieldByName(fieldName)
+
+	if field.IsValid() && field.Kind() == reflect.Float64 {
+		return field.Float(), true
 	}
-	return false
+	// if not, it wont have an applied multiplier since not implemented. Currently mostly mania mods
+	return 1.0, false
+}
+
+func reflectValue(data interface{}) reflect.Value {
+	// create a reflect value from the modmults
+	value := reflect.ValueOf(data)
+
+	if value.Kind() == reflect.Ptr {
+		// if the value is a pointer, return the value assigned to it
+		value = value.Elem()
+	}
+	return value
 }
 
 func (mods Modifier) String() (s string) {

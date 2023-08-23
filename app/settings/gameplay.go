@@ -207,6 +207,48 @@ func initGameplay() *gameplay {
 			FoldInReplays:     false,
 			AdditionalSpacing: 0,
 		},
+		ModMults: &modMults{
+			NoFail:            0.5,
+			Easy:              0.5,
+			Hidden:            1.06,
+			HardRock:          1.06,
+			SuddenDeath:       1.00,
+			DoubleTime:        1.2, // on lazer this is 1.1
+			Relax:             0,   // on lazer this is 0.1
+			HalfTime:          0.3, // on lazer this is 0.7
+			Nightcore:         1.2, // on lazer this is 1.1
+			Flashlight:        1.12,
+			SpunOut:           0.9,
+			Relax2:            0, // on lazer this is 0.1 - autopilot
+			Perfect:           1.00,
+			Random:            1.00,
+			Daycore:           0.3, // on lazer this is 0.7 - matched with HT
+			Blinds:            1.12,
+			StrictTracking:    1.00,
+			AccuracyChallenge: 1.00,
+			DifficultyAdjust:  0.5,
+			Classic:           1.00,
+			Alternate:         1.00,
+			SingleTap:         1.00,
+			Transform:         1.00,
+			Wiggle:            1.00,
+			SpinIn:            1.00,
+			Grow:              1.00,
+			Deflate:           1.00,
+			WindUp:            1.00,
+			WindDown:          1.00,
+			Traceable:         1.00,
+			BarrelRoll:        1.00,
+			ApproachDifferent: 1.00,
+			Muted:             1.00,
+			NoScope:           1.00,
+			Magnetised:        1.00,
+			Repel:             1.00,
+			AdaptiveSpeed:     1.00,
+			FreezeFrame:       1.00,
+			Bubbles:           1.00,
+			Synesthesia:       1.00,
+		},
 		Boundaries: &boundaries{
 			Enabled:         true,
 			BorderThickness: 1,
@@ -253,6 +295,7 @@ type gameplay struct {
 	KeyOverlay              *hudElementOffset
 	ScoreBoard              *scoreBoard
 	Mods                    *mods
+	ModMults                *modMults
 	Boundaries              *boundaries
 	Underlay                *underlay
 	HUDFont                 string  `label:"Overlay (HUD) font" file:"Select HUD font" filter:"TrueType/OpenType Font (*.ttf, *.otf)|ttf,otf" tooltip:"Sets the font that will be used for PP/UR/hit counts" liveedit:"false"`
@@ -379,6 +422,66 @@ type mods struct {
 	HideInReplays     bool
 	FoldInReplays     bool
 	AdditionalSpacing float64 `string:"true" min:"-1366" max:"1366"`
+}
+
+type modMults struct {
+	NoFail float64 `min:"0" max:"2" string:"true"`
+	Easy   float64 `min:"0" max:"2" string:"true"`
+	// TouchDevice float64 `min:"0.1" max:"2"`
+	Hidden      float64 `min:"0" max:"2" string:"true"`
+	HardRock    float64 `min:"0" max:"2" string:"true"`
+	SuddenDeath float64 `min:"0" max:"2" string:"true"`
+	DoubleTime  float64 `min:"0" max:"2" string:"true"`
+	Relax       float64 `min:"0" max:"2" string:"true"`
+	HalfTime    float64 `min:"0" max:"2" string:"true"`
+	Nightcore   float64 `min:"0" max:"2" string:"true"`
+	Flashlight  float64 `min:"0" max:"2" string:"true"`
+	// Autoplay    float64 `min:"0.1" max:"2"`
+	SpunOut float64 `min:"0" max:"2" string:"true"`
+	Relax2  float64 `min:"0" max:"2" string:"true"` // Autopilot
+	Perfect float64 `min:"0" max:"2" string:"true"`
+	// Key4              float64 `min:"0.1" max:"2"`
+	// Key5              float64 `min:"0.1" max:"2"`
+	// Key6              float64 `min:"0.1" max:"2"`
+	// Key7              float64 `min:"0.1" max:"2"`
+	// Key8              float64 `min:"0.1" max:"2"`
+	// FadeIn            float64 `min:"0.1" max:"2"`
+	Random float64 `min:"0" max:"2" string:"true"`
+	// Cinema float64 `min:"0.1" max:"2"`
+	// Target float64 `min:"0.1" max:"2"`
+	// Key9              float64 `min:"0.1" max:"2"`
+	// KeyCoop           float64 `min:"0.1" max:"2"`
+	// Key1              float64 `min:"0.1" max:"2"`
+	// Key3              float64 `min:"0.1" max:"2"`
+	// Key2              float64 `min:"0.1" max:"2"`
+	// ScoreV2           float64 `min:"0.1" max:"2"`
+	// LastMod           float64 `min:"0.1" max:"2"` // Cinema
+	Daycore           float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	Blinds            float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	StrictTracking    float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	AccuracyChallenge float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	DifficultyAdjust  float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	Classic           float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	Alternate         float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	SingleTap         float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	Transform         float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	Wiggle            float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	SpinIn            float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	Grow              float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	Deflate           float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	WindUp            float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	WindDown          float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	Traceable         float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	BarrelRoll        float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	ApproachDifferent float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	Muted             float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	NoScope           float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	Magnetised        float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	Repel             float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	AdaptiveSpeed     float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	FreezeFrame       float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	Bubbles           float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
+	Synesthesia       float64 `min:"0" max:"2" string:"true" tooltip:"lazer-only mod"`
 }
 
 type strainGraph struct {
