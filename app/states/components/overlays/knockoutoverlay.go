@@ -2,6 +2,13 @@ package overlays
 
 import (
 	"fmt"
+	"log"
+	"math"
+	"math/rand"
+	"sort"
+	"strconv"
+	"strings"
+
 	"github.com/wieku/danser-go/app/beatmap/difficulty"
 	"github.com/wieku/danser-go/app/dance"
 	"github.com/wieku/danser-go/app/discord"
@@ -21,12 +28,6 @@ import (
 	"github.com/wieku/danser-go/framework/math/animation/easing"
 	color2 "github.com/wieku/danser-go/framework/math/color"
 	"github.com/wieku/danser-go/framework/math/vector"
-	"log"
-	"math"
-	"math/rand"
-	"sort"
-	"strconv"
-	"strings"
 )
 
 type stats struct {
@@ -489,8 +490,11 @@ func (overlay *KnockoutOverlay) DrawHUD(batch *batch.QuadBatch, colors []color2.
 
 		pWidth := overlay.font.GetWidth(scl, r.Name)
 
+		// I think this is where we can render the score multiplier as well!!!!
 		if r.Mods != "" {
-			pWidth += overlay.font.GetWidth(scl*0.8, "+"+r.Mods)
+			//                                                       f is decimal floating-point, -1 is default, 64 is the bit size
+			pWidth += overlay.font.GetWidth(scl*0.8, "+"+r.Mods+" ("+strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', -1, 64)+"x)")
+
 		}
 
 		maxPlayerWidth = max(maxPlayerWidth, pWidth)
@@ -548,7 +552,7 @@ func (overlay *KnockoutOverlay) DrawHUD(batch *batch.QuadBatch, colors []color2.
 		batch.SetColor(1, 1, 1, alpha*player.fade.GetValue())
 
 		if r.Mods != "" {
-			width += overlay.font.GetWidth(scl*0.8, "+"+r.Mods)
+			width += overlay.font.GetWidth(scl*0.8, "+"+r.Mods+" ("+strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', -1, 64)+"x)")
 		}
 
 		if r.Grade != osu.NONE {
@@ -633,7 +637,7 @@ func (overlay *KnockoutOverlay) DrawHUD(batch *batch.QuadBatch, colors []color2.
 		batch.SetColor(1, 1, 1, alpha*player.fade.GetValue())
 
 		if r.Mods != "" {
-			overlay.font.DrawOrigin(batch, 3.2*scl+width+nWidth+xSlideLeft, rowBaseY+ascScl, vector.BottomLeft, scl*0.8, false, "+"+r.Mods)
+			overlay.font.DrawOrigin(batch, 3.2*scl+width+nWidth+xSlideLeft, rowBaseY+ascScl, vector.BottomLeft, scl*0.8, false, "+"+r.Mods+" ("+strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', -1, 64)+"x)")
 		}
 	}
 }
