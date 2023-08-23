@@ -124,6 +124,9 @@ var modsString = [...]string{
 	"V2",
 	"LM",
 	"DC",
+	"BL", // Blinds
+	"ST", // Strict Tracking
+	"AC", // Accuracy Challenge
 	"DA", // Difficulty Adjust
 	"CL", // Classic
 	"AL", // Alternate
@@ -181,6 +184,9 @@ var modsStringFull = [...]string{
 	"ScoreV2",
 	"LastMod",
 	"Daycore",
+	"Blinds",
+	"StrictTracking",
+	"AccuracyChallenge",
 	"DifficultyAdjust",
 	"Classic",
 	"Alternate",
