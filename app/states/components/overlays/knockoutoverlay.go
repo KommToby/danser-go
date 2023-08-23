@@ -492,8 +492,12 @@ func (overlay *KnockoutOverlay) DrawHUD(batch *batch.QuadBatch, colors []color2.
 
 		// I think this is where we can render the score multiplier as well!!!!
 		if r.Mods != "" {
-			//                                                       f is decimal floating-point, -1 is default, 64 is the bit size
-			pWidth += overlay.font.GetWidth(scl*0.8, "+"+r.Mods+" ("+strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', -1, 64)+"x)")
+			if settings.Knockout.ModMults {
+				//                                                       f is decimal floating-point, -1 is default, 64 is the bit size
+				pWidth += overlay.font.GetWidth(scl*0.8, "+"+r.Mods+" ("+strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', -1, 64)+"x)")
+			} else {
+				pWidth += overlay.font.GetWidth(scl*0.8, "+"+r.Mods)
+			}
 
 		}
 
@@ -552,7 +556,12 @@ func (overlay *KnockoutOverlay) DrawHUD(batch *batch.QuadBatch, colors []color2.
 		batch.SetColor(1, 1, 1, alpha*player.fade.GetValue())
 
 		if r.Mods != "" {
-			width += overlay.font.GetWidth(scl*0.8, "+"+r.Mods+" ("+strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', -1, 64)+"x)")
+			if settings.Knockout.ModMults {
+				//                                                       f is decimal floating-point, -1 is default, 64 is the bit size
+				width += overlay.font.GetWidth(scl*0.8, "+"+r.Mods+" ("+strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', -1, 64)+"x)")
+			} else {
+				width += overlay.font.GetWidth(scl*0.8, "+"+r.Mods)
+			}
 		}
 
 		if r.Grade != osu.NONE {
@@ -637,7 +646,11 @@ func (overlay *KnockoutOverlay) DrawHUD(batch *batch.QuadBatch, colors []color2.
 		batch.SetColor(1, 1, 1, alpha*player.fade.GetValue())
 
 		if r.Mods != "" {
-			overlay.font.DrawOrigin(batch, 3.2*scl+width+nWidth+xSlideLeft, rowBaseY+ascScl, vector.BottomLeft, scl*0.8, false, "+"+r.Mods+" ("+strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', -1, 64)+"x)")
+			if settings.Knockout.ModMults {
+				overlay.font.DrawOrigin(batch, 3.2*scl+width+nWidth+xSlideLeft, rowBaseY+ascScl, vector.BottomLeft, scl*0.8, false, "+"+r.Mods+" ("+strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', -1, 64)+"x)")
+			} else {
+				overlay.font.DrawOrigin(batch, 3.2*scl+width+nWidth+xSlideLeft, rowBaseY+ascScl, vector.BottomLeft, scl*0.8, false, "+"+r.Mods)
+			}
 		}
 	}
 }

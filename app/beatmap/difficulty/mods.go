@@ -165,7 +165,7 @@ var modsStringFull = [...]string{
 	"Flashlight",
 	"Autoplay",
 	"SpunOut",
-	"Relax2",
+	"Relax2", // Autopilot
 	"Perfect",
 	"Key4",
 	"Key5",

@@ -37,6 +37,9 @@ type knockout struct {
 	// Hide specific mods from being displayed in overlay (like NF)
 	HideMods string `liveedit:"false"`
 
+	// Include mod multipliers after the mods
+	ModMults bool `label:"Mod Multipliers" tooltip:"Visible mod multipliers after mod combinations"`
+
 	// Max players shown (excluding danser) on a map. Caps at 50.
 	MaxPlayers int `skip:"true" label:"Max players loaded (legacy)" string:"true" min:"0" max:"100" tooltip:"Applicable only to classic knockout"`
 
