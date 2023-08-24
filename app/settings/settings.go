@@ -5,13 +5,14 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/itchio/lzma"
-	"github.com/wieku/danser-go/framework/files"
 	"io"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/itchio/lzma"
+	"github.com/wieku/danser-go/framework/files"
 )
 
 type defaultsFactory struct{}
@@ -175,7 +176,6 @@ func (config *Config) migrateHitCounterColors() {
 	if config.Gameplay.HitCounter.Color == nil {
 		return
 	}
-
 	idx := 0
 
 	ln := len(config.Gameplay.HitCounter.Color)
