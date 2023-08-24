@@ -188,7 +188,9 @@ func run() {
 			panic("Incompatible flags selected: -ss, -record")
 		}
 
+		// just for initialisation
 		modsParsed := difficulty2.ParseMods(*mods)
+		lazer := false
 
 		if *replay != "" {
 			bytes, err := ioutil.ReadFile(*replay)
@@ -211,7 +213,13 @@ func run() {
 
 			*md5 = rp.BeatmapMD5
 			*id = -1
-			modsParsed = difficulty2.Modifier(rp.Mods)
+			// If its a lazer replay, reset the parsed mods to include lazer mods
+			if rp.ScoreInfo != nil {
+				lazer = true
+				modsParsed = difficulty2.ParseLazerMods(rp.ScoreInfo)
+			} else {
+				modsParsed = difficulty2.Modifier(rp.Mods)
+			}
 			*knockout = true
 			settings.REPLAY = *replay
 		}
@@ -467,19 +475,70 @@ func run() {
 
 		bass.Init(settings.RECORD)
 		audio.LoadSamples()
-
 		speedBefore := settings.SPEED
+		// Speed Settings for Stable
+		if !lazer {
+			if modsParsed.Active(difficulty2.Nightcore) {
+				// We can probably check for lazer data here to see if its a custom rate change
+				settings.SPEED *= 1.5
+				settings.PITCH *= 1.5
+			} else if modsParsed.Active(difficulty2.DoubleTime) {
+				settings.SPEED *= 1.5
+			} else if modsParsed.Active(difficulty2.Daycore) {
+				settings.PITCH *= 0.75
+				settings.SPEED *= 0.75
+			} else if modsParsed.Active(difficulty2.HalfTime) {
+				settings.SPEED *= 0.75
+			}
+		} else {
+			// Speed Settings for Lazer - we unfortunately have to re-load the replay
+			bytes, err := ioutil.ReadFile(*replay)
+			if err != nil {
+				panic(err)
+			}
 
-		if modsParsed.Active(difficulty2.Nightcore) {
-			settings.SPEED *= 1.5
-			settings.PITCH *= 1.5
-		} else if modsParsed.Active(difficulty2.DoubleTime) {
-			settings.SPEED *= 1.5
-		} else if modsParsed.Active(difficulty2.Daycore) {
-			settings.PITCH *= 0.75
-			settings.SPEED *= 0.75
-		} else if modsParsed.Active(difficulty2.HalfTime) {
-			settings.SPEED *= 0.75
+			rp, err := rplpa.ParseReplay(bytes)
+			if err != nil {
+				panic(err)
+			}
+
+			rateChangeMods := []difficulty2.Modifier{
+				difficulty2.DoubleTime,
+				difficulty2.HalfTime,
+				difficulty2.Nightcore,
+				difficulty2.Daycore,
+			}
+
+			rateChange := false
+			for _, mod := range rateChangeMods {
+				if modsParsed.Active(mod) {
+					rateChange = true
+					break
+				}
+			}
+
+			// I hate this I hate this I hate this I hate this
+			if rateChange {
+				for _, mod := range rp.ScoreInfo.Mods {
+					if val, ok := mod.Settings["speed_change"]; ok {
+						switch mod.Acronym {
+						case "DT", "HT":
+							settings.SPEED *= val.(float64)
+							break
+
+						case "NC":
+							settings.SPEED *= val.(float64)
+							settings.PITCH *= 1.5
+							break
+
+						case "DC":
+							settings.SPEED *= val.(float64)
+							settings.PITCH *= 0.75
+							break
+						}
+					}
+				}
+			}
 		}
 
 		if settings.PLAY || !settings.KNOCKOUT || allowDA {
