@@ -2,6 +2,13 @@ package overlays
 
 import (
 	"fmt"
+	"log"
+	"math"
+	"os"
+	"path/filepath"
+	"strconv"
+	"strings"
+
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/wieku/danser-go/app/audio"
 	"github.com/wieku/danser-go/app/beatmap"
@@ -31,12 +38,6 @@ import (
 	color2 "github.com/wieku/danser-go/framework/math/color"
 	"github.com/wieku/danser-go/framework/math/mutils"
 	"github.com/wieku/danser-go/framework/math/vector"
-	"log"
-	"math"
-	"os"
-	"path/filepath"
-	"strconv"
-	"strings"
 )
 
 const (
@@ -912,30 +913,43 @@ func (overlay *ScoreOverlay) initMods() {
 	}
 
 	offset := -48.0 * scale
+	daOffset := -48.0 * scale
 	for i, s := range mods {
+		fmt.Println("overlay mod", s)
 		var mod sprite.ISprite
 
+		// so here, we need to pass in custom DA values
+		// specifically, replacing DT/NC/HT/DC with a DA value if its a custom lazer rate change
+		// Yippee
+		// Personally I think that having the difficulty adjust mods displayed BELOW the regular mods. So im gonna do that.
+		// This contains a significant amount of duplicate code that needs to be cleaned up
 		if strings.HasPrefix(s, "DA:") {
 			bgTex := skin.GetTexture("selection-mod-base")
 
-			modBg := sprite.NewSpriteSingle(bgTex, float64(i), vector.NewVec2d(overlay.ScaledWidth+offset, 150), vector.Centre)
+			modBg := sprite.NewSpriteSingle(bgTex, float64(i), vector.NewVec2d(overlay.ScaledWidth+daOffset, 250), vector.Centre)
 
 			initMod(modBg, i)
 
 			overlay.mods.Add(modBg)
 
-			mod = sprite.NewTextSpriteSize(strings.TrimPrefix(s, "DA:"), overlay.keyFont, float64(bgTex.Height)/4, float64(i)+0.5, vector.NewVec2d(overlay.ScaledWidth+offset, 150), vector.Centre)
+			mod = sprite.NewTextSpriteSize(strings.TrimPrefix(s, "DA:"), overlay.keyFont, float64(bgTex.Height)/4, float64(i)+0.5, vector.NewVec2d(overlay.ScaledWidth+daOffset, 250), vector.Centre)
+			initMod(mod, i)
+
+			if (overlay.cursor.IsPlayer && !overlay.cursor.IsAutoplay) || settings.Gameplay.Mods.FoldInReplays {
+				daOffset -= (16 + settings.Gameplay.Mods.AdditionalSpacing) * scale
+			} else {
+				daOffset -= (80 + settings.Gameplay.Mods.AdditionalSpacing) * scale
+			}
 		} else {
 			modSpriteName := "selection-mod-" + strings.ToLower(s)
 			mod = sprite.NewSpriteSingle(skin.GetTexture(modSpriteName), float64(i), vector.NewVec2d(overlay.ScaledWidth+offset, 150), vector.Centre)
-		}
+			initMod(mod, i)
 
-		initMod(mod, i)
-
-		if (overlay.cursor.IsPlayer && !overlay.cursor.IsAutoplay) || settings.Gameplay.Mods.FoldInReplays {
-			offset -= (16 + settings.Gameplay.Mods.AdditionalSpacing) * scale
-		} else {
-			offset -= (80 + settings.Gameplay.Mods.AdditionalSpacing) * scale
+			if (overlay.cursor.IsPlayer && !overlay.cursor.IsAutoplay) || settings.Gameplay.Mods.FoldInReplays {
+				offset -= (16 + settings.Gameplay.Mods.AdditionalSpacing) * scale
+			} else {
+				offset -= (80 + settings.Gameplay.Mods.AdditionalSpacing) * scale
+			}
 		}
 
 		overlay.mods.Add(mod)

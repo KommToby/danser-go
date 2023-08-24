@@ -524,13 +524,16 @@ func run() {
 					if val, ok := mod.Settings["speed_change"]; ok {
 						switch mod.Acronym {
 						case "DT", "HT":
+							beatMap.Diff.SetCustomSpeed(val.(float64))
 							settings.SPEED *= val.(float64)
 
 						case "NC":
+							beatMap.Diff.SetCustomSpeed(val.(float64))
 							settings.SPEED *= val.(float64)
 							settings.PITCH *= 1.5
 
 						case "DC":
+							beatMap.Diff.SetCustomSpeed(val.(float64))
 							settings.SPEED *= val.(float64)
 							settings.PITCH *= 0.75
 						}
