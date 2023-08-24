@@ -502,39 +502,50 @@ func run() {
 				panic(err)
 			}
 
-			rateChangeMods := []difficulty2.Modifier{
+			changeMods := []difficulty2.Modifier{
 				difficulty2.DoubleTime,
 				difficulty2.HalfTime,
 				difficulty2.Nightcore,
 				difficulty2.Daycore,
+				difficulty2.DifficultyAdjust,
 			}
 
-			rateChange := false
-			for _, mod := range rateChangeMods {
+			change := false
+			for _, mod := range changeMods {
 				if modsParsed.Active(mod) {
-					rateChange = true
+					change = true
 					break
 				}
 			}
 
 			// I hate this I hate this I hate this I hate this
-			if rateChange {
+			if change {
 				for _, mod := range rp.ScoreInfo.Mods {
 					if val, ok := mod.Settings["speed_change"]; ok {
 						switch mod.Acronym {
 						case "DT", "HT":
 							settings.SPEED *= val.(float64)
-							break
 
 						case "NC":
 							settings.SPEED *= val.(float64)
 							settings.PITCH *= 1.5
-							break
 
 						case "DC":
 							settings.SPEED *= val.(float64)
 							settings.PITCH *= 0.75
-							break
+						}
+					} else if mod.Acronym == "DA" {
+						if val, ok := mod.Settings["circle_size"]; ok {
+							beatMap.Diff.SetCSCustom(val.(float64))
+						}
+						if val, ok := mod.Settings["approach_rate"]; ok {
+							beatMap.Diff.SetARCustom(val.(float64))
+						}
+						if val, ok := mod.Settings["drain_rate"]; ok {
+							beatMap.Diff.SetHPCustom(val.(float64))
+						}
+						if val, ok := mod.Settings["overall_difficulty"]; ok {
+							beatMap.Diff.SetODCustom(val.(float64))
 						}
 					}
 				}
