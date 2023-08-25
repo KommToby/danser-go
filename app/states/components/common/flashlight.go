@@ -14,7 +14,9 @@ import (
 	"github.com/wieku/danser-go/framework/math/vector"
 )
 
-const DefaultFlashlightSize = 168.0
+// has to be var for lazer implementation
+var DefaultFlashlightSize = 168.0
+
 const DefaultFlashlightDuration = 800.0
 
 type Flashlight struct {
@@ -60,6 +62,8 @@ func NewFlashlight(beatMap *beatmap.BeatMap) *Flashlight {
 
 	vao.Attach(flShader)
 
+	// custom lazer flashlight size
+	DefaultFlashlightSize *= beatMap.Diff.GetFL()
 	size := animation.NewGlider(DefaultFlashlightSize * 8)
 
 	startTime := beatMap.HitObjects[0].GetStartTime() / settings.SPEED

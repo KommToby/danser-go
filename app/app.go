@@ -550,6 +550,11 @@ func run() {
 						if val, ok := mod.Settings["overall_difficulty"]; ok {
 							beatMap.Diff.SetODCustom(val.(float64))
 						}
+					} else if mod.Acronym == "FL" {
+						if val, ok := mod.Settings["size_multiplier"]; ok {
+							beatMap.Diff.SetFLCustom(val.(float64))
+						}
+						// can add combo_based_size later
 					}
 				}
 			}
