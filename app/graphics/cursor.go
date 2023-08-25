@@ -1,6 +1,10 @@
 package graphics
 
 import (
+	"math"
+	"math/rand"
+	"time"
+
 	"github.com/go-gl/mathgl/mgl32"
 	"github.com/wieku/danser-go/app/bmath/camera"
 	"github.com/wieku/danser-go/app/settings"
@@ -15,9 +19,6 @@ import (
 	color2 "github.com/wieku/danser-go/framework/math/color"
 	"github.com/wieku/danser-go/framework/math/math32"
 	"github.com/wieku/danser-go/framework/math/vector"
-	"math"
-	"math/rand"
-	"time"
 )
 
 type cursorRenderer interface {

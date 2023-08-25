@@ -16,6 +16,7 @@ import (
 
 // has to be var for lazer implementation
 var DefaultFlashlightSize = 168.0
+var FlashlightCombo = true
 
 const DefaultFlashlightDuration = 800.0
 
@@ -63,7 +64,8 @@ func NewFlashlight(beatMap *beatmap.BeatMap) *Flashlight {
 	vao.Attach(flShader)
 
 	// custom lazer flashlight size
-	DefaultFlashlightSize *= beatMap.Diff.GetFL()
+	DefaultFlashlightSize *= beatMap.Diff.GetFLSize()
+	FlashlightCombo = beatMap.Diff.GetFLCombo()
 	size := animation.NewGlider(DefaultFlashlightSize * 8)
 
 	startTime := beatMap.HitObjects[0].GetStartTime() / settings.SPEED
@@ -89,12 +91,13 @@ func (fl *Flashlight) UpdatePosition(cursorPosition vector.Vector2f) {
 
 func (fl *Flashlight) UpdateCombo(combo int64) {
 	target := DefaultFlashlightSize
-
-	switch {
-	case combo > 200:
-		target *= 0.625
-	case combo > 100:
-		target *= 0.8125
+	if FlashlightCombo {
+		switch {
+		case combo > 200:
+			target *= 0.625
+		case combo > 100:
+			target *= 0.8125
+		}
 	}
 
 	fl.target = target

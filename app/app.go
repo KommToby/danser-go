@@ -552,9 +552,12 @@ func run() {
 						}
 					} else if mod.Acronym == "FL" {
 						if val, ok := mod.Settings["size_multiplier"]; ok {
-							beatMap.Diff.SetFLCustom(val.(float64))
+							beatMap.Diff.SetFLCustomSize(val.(float64))
 						}
-						// can add combo_based_size later
+						// need to implement this visually
+						if val, ok := mod.Settings["combo_based_size"]; ok {
+							beatMap.Diff.SetFLCustomSize(val.(float64))
+						}
 					}
 				}
 			}

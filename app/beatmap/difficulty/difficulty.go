@@ -22,7 +22,8 @@ type Difficulty struct {
 	cs float64
 	hp float64
 
-	flashlightSize float64
+	flashlightSize  float64
+	flashlightCombo bool
 
 	baseAR float64
 	baseOD float64
@@ -71,6 +72,7 @@ func NewDifficulty(hp, cs, od, ar float64) *Difficulty {
 	diff.CustomSpeed = 1
 
 	diff.flashlightSize = 1
+	diff.flashlightCombo = true
 
 	diff.calculate()
 
@@ -181,7 +183,7 @@ func (diff *Difficulty) GetModStringFull() []string {
 		mods = append(mods, fmt.Sprintf("DA:%sx", mutils.FormatWOZeros(cSpeed, 2)))
 	}
 
-	if flashlight := diff.GetFL(); flashlight != 1 {
+	if flashlight := diff.GetFLSize(); flashlight != 1 {
 		mods = append(mods, fmt.Sprintf("DA:FL-%sx", mutils.FormatWOZeros(flashlight, 2)))
 	}
 
@@ -279,8 +281,12 @@ func (diff *Difficulty) GetAR() float64 {
 	return diff.ar
 }
 
-func (diff *Difficulty) GetFL() float64 {
+func (diff *Difficulty) GetFLSize() float64 {
 	return diff.flashlightSize
+}
+
+func (diff *Difficulty) GetFLCombo() bool {
+	return diff.flashlightCombo
 }
 
 func (diff *Difficulty) SetAR(ar float64) {
@@ -299,8 +305,12 @@ func (diff *Difficulty) SetCustomSpeed(speed float64) {
 	diff.calculate()
 }
 
-func (diff *Difficulty) SetFLCustom(fl float64) {
+func (diff *Difficulty) SetFLCustomSize(fl float64) {
 	diff.flashlightSize = fl
+}
+
+func (diff *Difficulty) SetFLCustomCombo(fl bool) {
+	diff.flashlightCombo = fl
 }
 
 func DifficultyRate(diff, min, mid, max float64) float64 {
