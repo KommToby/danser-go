@@ -926,8 +926,8 @@ func (overlay *ScoreOverlay) initMods() {
 		if strings.HasPrefix(s, "DA:") {
 			bgTex := skin.GetTexture("selection-mod-base")
 			if strings.HasPrefix(s, "DA:FL") {
-				bgTex = skin.GetTexture("selection-mod-base-fl")
-				s = strings.Replace(s, "FL-", "", 1) // so that only the flashlight multiplier will display
+				bgTex = skin.GetTexture("selection-mod-base-fl") // this base has the same colour as flashlight mod does on the default skin
+				s = strings.Replace(s, "FL-", "", 1)             // so that only the flashlight multiplier will display
 			}
 			modBg := sprite.NewSpriteSingle(bgTex, float64(i), vector.NewVec2d(overlay.ScaledWidth+daOffset, 250), vector.Centre)
 
