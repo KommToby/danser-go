@@ -556,7 +556,7 @@ func run() {
 						}
 						// need to implement this visually
 						if val, ok := mod.Settings["combo_based_size"]; ok {
-							beatMap.Diff.SetFLCustomSize(val.(float64))
+							beatMap.Diff.SetFLCustomCombo(val.(bool))
 						}
 					}
 				}
