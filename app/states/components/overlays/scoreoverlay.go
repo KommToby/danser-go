@@ -925,7 +925,10 @@ func (overlay *ScoreOverlay) initMods() {
 		// This contains a significant amount of duplicate code that needs to be cleaned up
 		if strings.HasPrefix(s, "DA:") {
 			bgTex := skin.GetTexture("selection-mod-base")
-
+			if strings.HasPrefix(s, "DA:FL") {
+				bgTex = skin.GetTexture("selection-mod-base-fl")
+				s = strings.Replace(s, "FL-", "", 1) // so that only the flashlight multiplier will display
+			}
 			modBg := sprite.NewSpriteSingle(bgTex, float64(i), vector.NewVec2d(overlay.ScaledWidth+daOffset, 250), vector.Centre)
 
 			initMod(modBg, i)
