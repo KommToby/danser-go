@@ -8,6 +8,8 @@ func initKnockout() *knockout {
 		GraceEndTime:        -10,
 		BubbleMinimumCombo:  200,
 		ExcludeMods:         "",
+		HideMods:            "",
+		LazerMults:          0.1,
 		MaxPlayers:          50,
 		MinPlayers:          1,
 		RevivePlayersAtEnd:  false,
@@ -39,6 +41,9 @@ type knockout struct {
 
 	// Include mod multipliers after the mods
 	ModMults bool `label:"Mod Multipliers" tooltip:"Visible mod multipliers after mod combinations"`
+
+	// Mod Multiplier for Custom Lazer Settings
+	LazerMults float64 `label:"Custom lazer multipliers" tooltip:"For customisable things such as rate change 1.01x, flashlight size, etc." min:"0" max:"2" string:"true"`
 
 	// Max players shown (excluding danser) on a map. Caps at 50.
 	MaxPlayers int `skip:"true" label:"Max players loaded (legacy)" string:"true" min:"0" max:"100" tooltip:"Applicable only to classic knockout"`

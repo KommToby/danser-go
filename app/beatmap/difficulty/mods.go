@@ -216,33 +216,60 @@ var modsStringFull = [...]string{
 
 func (mods Modifier) GetScoreMultiplier() float64 {
 	multiplier := 1.0
+	lazerCount := 0
 
-	for _, enabledMod := range mods.StringFull() { // checks every enabled mod against the modmult struct in gameplay settings
-		if value, ok := getFieldValue(settings.Gameplay.ModMults, enabledMod); ok {
-			multiplier *= value // if the mod has a defined multiplier in gameplay settings it applies it
+	// Convert settings.LazerMultiplier to a map for O(1) lookups (a lot faster)
+	lazerMultiplierMap := make(map[string]struct{})
+	for _, lazerMultiplier := range settings.LazerMultiplier {
+		lazerMultiplierMap[lazerMultiplier] = struct{}{}
+	}
+
+	lazerSet := make(map[int]struct{})
+	modStr := mods.String()
+
+	// Parse mod acronyms by using a double index
+	for index := 0; index < len(modStr)-1; index += 2 {
+		enabledAcronym := modStr[index : index+2]
+		if _, exists := lazerMultiplierMap[enabledAcronym]; exists {
+			lazerCount++
+			lazerSet[index/2] = struct{}{} // use half index because we are using two characters for the search
 		}
 	}
-	return multiplier
+
+	for index, enabledMod := range mods.StringFull() {
+		if _, exists := lazerSet[index]; exists {
+			continue
+		}
+		if value, ok := getFieldValue(settings.Gameplay.ModMults, enabledMod); ok {
+			multiplier *= value
+		}
+	}
+
+	if lazerCount == 0 {
+		return multiplier
+	}
+
+	return multiplier * (settings.Knockout.LazerMults * float64(lazerCount))
 }
 
 func getFieldValue(data interface{}, fieldName string) (float64, bool) {
-	// get the mod multiplier if it exists in the modmult struct
 	value := reflectValue(data)
 	field := value.FieldByName(fieldName)
 
-	if field.IsValid() && field.Kind() == reflect.Float64 {
+	if !field.IsValid() {
+		return 1.0, false
+	}
+
+	if field.Kind() == reflect.Float64 {
 		return field.Float(), true
 	}
-	// if not, it wont have an applied multiplier since not implemented. Currently mostly mania mods
+
 	return 1.0, false
 }
 
 func reflectValue(data interface{}) reflect.Value {
-	// create a reflect value from the modmults
 	value := reflect.ValueOf(data)
-
 	if value.Kind() == reflect.Ptr {
-		// if the value is a pointer, return the value assigned to it
 		value = value.Elem()
 	}
 	return value
@@ -330,14 +357,34 @@ func ParseMods(mods string) (m Modifier) {
 
 func ParseLazerMods(scoreInfo *rplpa.ScoreInfo) (m Modifier) {
 	for _, mod := range scoreInfo.Mods {
+		if _, ok := mod.Settings["speed_change"]; ok {
+			switch mod.Acronym {
+			case "DT", "HT":
+				settings.LazerMultiplier = append(settings.LazerMultiplier, mod.Acronym)
+
+			case "NC":
+				settings.LazerMultiplier = append(settings.LazerMultiplier, mod.Acronym)
+
+			case "DC":
+				settings.LazerMultiplier = append(settings.LazerMultiplier, mod.Acronym)
+			}
+		} else if mod.Acronym == "FL" {
+			if _, ok := mod.Settings["size_multiplier"]; ok {
+				settings.LazerMultiplier = append(settings.LazerMultiplier, mod.Acronym)
+			}
+			if _, ok := mod.Settings["combo_based_size"]; ok {
+				settings.LazerMultiplier = append(settings.LazerMultiplier, mod.Acronym)
+			}
+		}
+
 		for index, availableMod := range modsString {
 			if availableMod == mod.Acronym {
 				m |= 1 << uint(index)
 				break
 			}
 		}
-	}
 
+	}
 	return m
 }
 

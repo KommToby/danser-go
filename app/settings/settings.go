@@ -19,6 +19,8 @@ type defaultsFactory struct{}
 
 var DefaultsFactory = &defaultsFactory{}
 
+var LazerMultiplier []string // this is the only way i can think of doin this
+
 type Config struct {
 	srcPath string
 	srcData []byte
