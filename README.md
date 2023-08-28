@@ -2,13 +2,11 @@
   <img width="500px" src="assets/textures/coinbig.png"/>
 </p>
 
-# danser-go
+# danser-go-lazer
 
-[![GitHub release](https://img.shields.io/github/release/wieku/danser-go.svg)](https://github.com/Wieku/danser-go/releases/latest)
-[![CodeFactor](https://www.codefactor.io/repository/github/wieku/danser-go/badge)](https://www.codefactor.io/repository/github/wieku/danser-go)
-[![Discord server](https://img.shields.io/discord/713705871758065685.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/UTPvbe8)
+danser-go-lazer is a fork of [danser-go](https://github.com/Wieku/danser-go) specifically for viewing osu!lazer replays, and including them in knockout with stable plays
 
-danser-go is a CLI visualisation tool for osu!standard maps.
+below you will find the readme from danser-go. Any questions about the fork you can contact me on discord at @kommsu
 
 As danser is in development phase, some things may break. If that happens please fill an issue with as much detail as possible.
 
