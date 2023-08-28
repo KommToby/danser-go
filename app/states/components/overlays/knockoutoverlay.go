@@ -494,7 +494,7 @@ func (overlay *KnockoutOverlay) DrawHUD(batch *batch.QuadBatch, colors []color2.
 		if r.Mods != "" {
 			if settings.Knockout.ModMults {
 				//                                                       f is decimal floating-point, -1 is default, 64 is the bit size
-				pWidth += overlay.font.GetWidth(scl*0.8, "+"+r.Mods+" ("+strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', 3, 64)+"x)")
+				pWidth += overlay.font.GetWidth(scl*0.8, "+"+r.Mods+" ("+strings.TrimRight(strings.TrimRight(strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', 3, 64), "0"), ".")+"x)")
 			} else {
 				pWidth += overlay.font.GetWidth(scl*0.8, "+"+r.Mods)
 			}
@@ -558,7 +558,7 @@ func (overlay *KnockoutOverlay) DrawHUD(batch *batch.QuadBatch, colors []color2.
 		if r.Mods != "" {
 			if settings.Knockout.ModMults {
 				//                                                       f is decimal floating-point, -1 is default, 64 is the bit size
-				width += overlay.font.GetWidth(scl*0.8, "+"+r.Mods+" ("+strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', 3, 64)+"x)")
+				width += overlay.font.GetWidth(scl*0.8, "+"+r.Mods+" ("+strings.TrimRight(strings.TrimRight(strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', 3, 64), "0"), ".")+"x)")
 			} else {
 				width += overlay.font.GetWidth(scl*0.8, "+"+r.Mods)
 			}
@@ -647,7 +647,7 @@ func (overlay *KnockoutOverlay) DrawHUD(batch *batch.QuadBatch, colors []color2.
 
 		if r.Mods != "" {
 			if settings.Knockout.ModMults {
-				overlay.font.DrawOrigin(batch, 3.2*scl+width+nWidth+xSlideLeft, rowBaseY+ascScl, vector.BottomLeft, scl*0.8, false, "+"+r.Mods+" ("+strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', 3, 64)+"x)")
+				overlay.font.DrawOrigin(batch, 3.2*scl+width+nWidth+xSlideLeft, rowBaseY+ascScl, vector.BottomLeft, scl*0.8, false, "+"+r.Mods+" ("+strings.TrimRight(strings.TrimRight(strconv.FormatFloat(r.ModsV.GetScoreMultiplier(), 'f', 3, 64), "0"), ".")+"x)")
 			} else {
 				overlay.font.DrawOrigin(batch, 3.2*scl+width+nWidth+xSlideLeft, rowBaseY+ascScl, vector.BottomLeft, scl*0.8, false, "+"+r.Mods)
 			}
