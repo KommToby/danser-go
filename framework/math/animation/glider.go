@@ -1,9 +1,11 @@
 package animation
 
 import (
+	"math/rand"
+	"sort"
+
 	"github.com/wieku/danser-go/framework/math/animation/easing"
 	"github.com/wieku/danser-go/framework/math/mutils"
-	"sort"
 )
 
 type event struct {
@@ -163,4 +165,19 @@ func (glider *Glider) RemoveLast() {
 
 func (glider *Glider) GetValue() float64 {
 	return glider.value
+}
+
+func (glider *Glider) AddWiggle(startTime, endTime, intensity float64) {
+	duration := (endTime - startTime) / 10.0 // dividing the time frame into smaller intervals for the wiggle effect
+	originalValue := glider.GetValue()       // the value around which the wiggle effect will take place
+
+	// Generate wiggle events
+	for t := startTime; t < endTime; t += duration {
+		// Randomly generate an offset from the original value within the intensity range
+		offset := (rand.Float64()*2 - 1) * intensity // Random float between -intensity and +intensity
+		wiggleValue := originalValue + offset
+
+		// Add the wiggle event
+		glider.AddEvent(t, t+duration, wiggleValue)
+	}
 }

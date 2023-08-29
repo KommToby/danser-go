@@ -1,9 +1,10 @@
 package osu
 
 import (
+	"math"
+
 	"github.com/wieku/danser-go/app/beatmap/difficulty"
 	"github.com/wieku/danser-go/app/beatmap/objects"
-	"math"
 )
 
 type objstate struct {
@@ -16,6 +17,7 @@ type Circle struct {
 	players           []*difficultyPlayer
 	state             map[*difficultyPlayer]*objstate
 	fadeStartRelative float64
+	wiggleActive      bool
 }
 
 func (circle *Circle) GetNumber() int64 {
@@ -34,9 +36,15 @@ func (circle *Circle) Init(ruleSet *OsuRuleSet, object objects.IHitObject, playe
 		circle.state[player] = new(objstate)
 		circle.fadeStartRelative = min(circle.fadeStartRelative, player.diff.Preempt)
 	}
+	// using getstarttime+fadestartrelative is very very bad optimised
+	// i need to find how long the specific AR is ms wise, before its an auto miss, and then just set the wiggle animations to that
+	// TODO
+	circle.hitCircle.Wiggle(circle.hitCircle.GetStartTime()-circle.fadeStartRelative, circle.hitCircle.GetStartTime()+circle.fadeStartRelative)
+	circle.wiggleActive = true
+
 }
 
-func (circle *Circle) UpdateFor(_ *difficultyPlayer, _ int64, _ bool) bool {
+func (circle *Circle) UpdateFor(_ *difficultyPlayer, time int64, _ bool) bool {
 	return true
 }
 
@@ -93,6 +101,10 @@ func (circle *Circle) UpdateClickFor(player *difficultyPlayer, time int64) bool 
 
 						circle.ruleSet.SendResult(time, player.cursor, circle, position.X, position.Y, hit, combo)
 
+						if circle.wiggleActive && float64(time) >= circle.hitCircle.GetStartTime() {
+							circle.hitCircle.StopWiggle()
+							circle.wiggleActive = false
+						}
 						state.isHit = true
 					}
 				} else {

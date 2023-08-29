@@ -1,6 +1,10 @@
 package objects
 
 import (
+	"math"
+	"math/rand"
+	"strconv"
+
 	"github.com/wieku/danser-go/app/audio"
 	"github.com/wieku/danser-go/app/beatmap/difficulty"
 	"github.com/wieku/danser-go/app/settings"
@@ -12,8 +16,6 @@ import (
 	"github.com/wieku/danser-go/framework/math/animation/easing"
 	color2 "github.com/wieku/danser-go/framework/math/color"
 	"github.com/wieku/danser-go/framework/math/vector"
-	"math"
-	"strconv"
 )
 
 const defaultCircleName = "hit"
@@ -283,6 +285,43 @@ func (circle *Circle) Shake(time float64) {
 		s.AddTransform(animation.NewSingleTransform(animation.MoveX, easing.Linear, time+60, time+80, 8, -8))
 		s.AddTransform(animation.NewSingleTransform(animation.MoveX, easing.Linear, time+80, time+100, -8, 8))
 		s.AddTransform(animation.NewSingleTransform(animation.MoveX, easing.Linear, time+100, time+120, 8, 0))
+	}
+}
+
+func (circle *Circle) Wiggle(startTime float64, endTime float64) {
+	duration := 100.0 // each movement duration in ms
+	amplitude := 7.0  // distance it moves in each wiggle
+
+	// Calculate the number of wiggles based on the time between startTime and endTime
+	totalWiggles := int((endTime - startTime) / (2 * duration)) // 2 times duration because we wiggle forth and back
+	// fmt.Println("total wiggles", totalWiggles)
+
+	// clear animations beforehand
+	circle.StopWiggle()
+
+	for i := 0; i < totalWiggles; i++ {
+		angle := rand.Float64() * 2 * math.Pi // random angle between 0 and 2π
+		xOffset := amplitude * math.Cos(angle)
+		yOffset := amplitude * math.Sin(angle)
+		// fmt.Println("offsets", xOffset, yOffset)
+
+		for _, s := range circle.sprites {
+
+			// Move to a random direction
+			s.AddTransform(animation.NewSingleTransform(animation.MoveX, easing.Linear, startTime+float64(i*2)*duration, startTime+float64(i*2+1)*duration, 0, xOffset))
+			s.AddTransform(animation.NewSingleTransform(animation.MoveY, easing.Linear, startTime+float64(i*2)*duration, startTime+float64(i*2+1)*duration, 0, yOffset))
+
+			// Move back to original position
+			s.AddTransform(animation.NewSingleTransform(animation.MoveX, easing.Linear, startTime+float64(i*2+1)*duration, startTime+float64(i*2+2)*duration, xOffset, 0))
+			s.AddTransform(animation.NewSingleTransform(animation.MoveY, easing.Linear, startTime+float64(i*2+1)*duration, startTime+float64(i*2+2)*duration, yOffset, 0))
+		}
+	}
+}
+
+func (circle *Circle) StopWiggle() {
+	for _, s := range circle.sprites {
+		s.ClearTransformationsOfType(animation.MoveX)
+		s.ClearTransformationsOfType(animation.MoveY)
 	}
 }
 

@@ -1,10 +1,11 @@
 package osu
 
 import (
+	"math"
+
 	"github.com/wieku/danser-go/app/beatmap/difficulty"
 	"github.com/wieku/danser-go/app/beatmap/objects"
 	"github.com/wieku/danser-go/framework/math/vector"
-	"math"
 )
 
 type Buttons int64
@@ -89,6 +90,10 @@ func (slider *Slider) Init(ruleSet *OsuRuleSet, object objects.IHitObject, playe
 			slider.state[player].points[len(slider.state[player].points)-1].scoreGiven = SliderEnd
 		}
 	}
+	// using getstarttime+fadestartrelative is very very bad optimised
+	// i need to find how long the specific AR is ms wise, before its an auto miss, and then just set the wiggle animations to that
+	// TODO
+	slider.hitSlider.Wiggle(slider.hitSlider.GetStartTime()-slider.fadeStartRelative, slider.hitSlider.GetStartTime()+slider.fadeStartRelative)
 }
 
 func (slider *Slider) UpdateClickFor(player *difficultyPlayer, time int64) bool {

@@ -1,6 +1,12 @@
 package objects
 
 import (
+	"math"
+	"math/rand"
+	"sort"
+	"strconv"
+	"strings"
+
 	"github.com/go-gl/mathgl/mgl32"
 	"github.com/wieku/danser-go/app/audio"
 	"github.com/wieku/danser-go/app/beatmap/difficulty"
@@ -16,10 +22,6 @@ import (
 	"github.com/wieku/danser-go/framework/math/math32"
 	"github.com/wieku/danser-go/framework/math/mutils"
 	"github.com/wieku/danser-go/framework/math/vector"
-	"math"
-	"sort"
-	"strconv"
-	"strings"
 )
 
 const (
@@ -98,6 +100,9 @@ type Slider struct {
 	updatedAtLeastOnce bool
 
 	lastScorePoint int
+
+	posXGlider *animation.Glider
+	posYGlider *animation.Glider
 }
 
 func NewSlider(data []string) *Slider {
@@ -174,6 +179,8 @@ func NewSlider(data []string) *Slider {
 	slider.bodyFade = animation.NewGlider(1)
 	slider.sliderSnakeTail = animation.NewGlider(1)
 	slider.sliderSnakeHead = animation.NewGlider(0)
+	slider.posXGlider = animation.NewGlider(float64(slider.StartPosRaw.X))
+	slider.posYGlider = animation.NewGlider(float64(slider.StartPosRaw.Y))
 
 	return slider
 }
@@ -734,6 +741,9 @@ func (slider *Slider) Update(time float64) bool {
 		p.scale.Update(time)
 	}
 
+	slider.posXGlider.Update(time)
+	slider.posYGlider.Update(time)
+
 	pos := slider.GetStackedPositionAtMod(time, slider.diff.Mods)
 
 	if settings.Objects.Sliders.Snaking.Out && slider.RepeatCount%2 == 1 && time >= math.Floor(slider.EndTime-slider.partLen) {
@@ -746,6 +756,9 @@ func (slider *Slider) Update(time float64) bool {
 	}
 
 	if time-slider.lastTime > 0 && time >= slider.StartTime {
+		posX := slider.posXGlider.GetValue()
+		posY := slider.posYGlider.GetValue()
+		slider.Pos = vector.NewVec2f(float32(posX), float32(posY))
 		angle := pos.AngleRV(slider.Pos)
 
 		reversed := int((time-slider.StartTime)/slider.partLen)%2 == 1
@@ -768,6 +781,8 @@ func (slider *Slider) Update(time float64) bool {
 		slider.StopSlideSamples()
 		slider.isSliding = false
 	}
+	slider.posXGlider.UpdateD(time)
+	slider.posYGlider.UpdateD(time)
 
 	slider.Pos = pos
 
@@ -1204,6 +1219,30 @@ func (slider *Slider) DrawApproach(time float64, color color2.Color, batch *batc
 	}
 
 	slider.startCircle.DrawApproach(time, color, batch)
+}
+
+func (slider *Slider) Wiggle(startTime float64, endTime float64) {
+	duration := 100.0 // each movement duration in ms
+	amplitude := 7.0  // distance it moves in each wiggle
+
+	// Calculate the number of wiggles based on the time between startTime and endTime
+	totalWiggles := int((endTime - startTime) / (2 * duration))
+
+	for i := 0; i < totalWiggles; i++ {
+		angle := rand.Float64() * 2 * math.Pi
+		xOffset := amplitude * math.Cos(angle)
+		yOffset := amplitude * math.Sin(angle)
+
+		currentX := slider.posXGlider.GetValue()
+		currentY := slider.posYGlider.GetValue()
+
+		// Add wiggle events to xGlider and yGlider
+		slider.posXGlider.AddEventS(startTime+float64(i*2)*duration, startTime+float64(i*2+1)*duration, currentX, currentX+xOffset)
+		slider.posYGlider.AddEventS(startTime+float64(i*2)*duration, startTime+float64(i*2+1)*duration, currentY, currentY+yOffset)
+
+		slider.posXGlider.AddEventS(startTime+float64(i*2+1)*duration, startTime+float64(i*2+2)*duration, currentX+xOffset, currentX)
+		slider.posYGlider.AddEventS(startTime+float64(i*2+1)*duration, startTime+float64(i*2+2)*duration, currentY+yOffset, currentY)
+	}
 }
 
 func (slider *Slider) GetType() Type {
